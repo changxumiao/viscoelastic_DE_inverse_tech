@@ -132,6 +132,11 @@ For example, on the cyber-defense of the work [^Laura]
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Hi Changxu, thanks for your interest. The balancing factor and the exponent of the sparse regularization term are set empirically. The coefficient of the sparse regularization term is set based on physics constraints as shown in Sec 2.6.2 of the paper.</p>&mdash; Laura De Lorenzis (@LDeLorenzisETHZ) <a href="https://twitter.com/LDeLorenzisETHZ/status/1463792741901549577?ref_src=twsrc%5Etfw">November 25, 2021</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 # Example
+| $t_B$ | $\alpha$ |
+| --- | --- |
+| $0.4618$ |$1.634$|
+
+
 | $g^{(n)}$ | $\tau^{(n)}$ |
 | --- | --- |
 | $0.9928$ |$0.6424$|
