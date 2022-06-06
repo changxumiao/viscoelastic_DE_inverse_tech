@@ -92,5 +92,22 @@ h = [2 7];
 f = conv_matrix(h,u)*u'
 ```
 
+# Deconvolution from stress-strain data
+
+$$ P= \mu\rho_{p}[\lambda(t)-\frac{1}{\lambda^2(t)}]+\mu[\lambda(t)-\frac{1}{\lambda^2(t)}]\sum_n g^{(n)}\tau^{(n)}e^{-\frac{t}{\tau^{(n)}}}+\lambda(t) \mu\gamma_\infty\int_0^t\sum_n g^{(n)}e^{-\frac{t-\tau}{\tau^{(n)}}}\frac{1}{\lambda^2(\tau)}d\tau-\frac{1}{\lambda^2(t)}\mu\gamma_\infty\int_0^t\sum_n g^{(n)}e^{-\frac{t-\tau}{\tau^{(n)}}}\lambda(\tau)d\tau$$
+
+Its abstract form is
+
+$$P=f*u+b$$
+
+Impose a dictionary, the form is
+
+$$P=Hg+b$$
+
+to find $g$ with accuracy and sparsity.
+```matlab
+b = rhop0mu*(lambda_t-1./lambda_t.^2);
+H = mu*(lambda_t-1./lambda_t.^2).*tau.*A+gammarhod0mu*lambda_t.*conv_matrix(1./lambda_t.^2,an1)*dt*A-gammarhod0mu*1./lambda_t.^2.*conv(lambda_t,an1)*dt*A
+```
 
 [search_PS_from_kinetics]: ./search_PS_from_kinetics.md
