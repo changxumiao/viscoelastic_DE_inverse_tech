@@ -71,14 +71,12 @@ $$f=h*u$$
 The $f$ is output signal, $u$ is input signal, $h$ is the filter (impulse response).
 
 ```matlab
-function h_matrix1 = conv_matrix(h,u)
+function h_matrix1 = conv_matrix(h,N)
+% return a square matrix of convolution operator, with size equal to N
 M = length(h);
-N = length(u);
 L = M+N-1;
 h_aug = [h,zeros(1,L-M)];
-u_aug = [u,zeros(1,L-N)];
 h_matrix = zeros(L,L);
-
 for ii=1:L
     h_matrix(:,ii) = circshift(h_aug,ii-1)';
 end
@@ -89,12 +87,12 @@ Example
 ```matlab
 u = [1 0 2];
 h = [2 7];
-f = conv_matrix(h,u)*u'
+f = conv_matrix(h,length(u))*u'
 ```
 
 # Deconvolution from stress-strain data
 
-$$ P= \mu\rho_{p}[\lambda(t)-\frac{1}{\lambda^2(t)}]+\mu[\lambda(t)-\frac{1}{\lambda^2(t)}]\sum_n g^{(n)}\tau^{(n)}e^{-\frac{t}{\tau^{(n)}}}+\lambda(t) \mu\gamma_\infty\int_0^t\sum_n g^{(n)}e^{-\frac{t-\tau}{\tau^{(n)}}}\frac{1}{\lambda^2(\tau)}d\tau-\frac{1}{\lambda^2(t)}\mu\gamma_\infty\int_0^t\sum_n g^{(n)}e^{-\frac{t-\tau}{\tau^{(n)}}}\lambda(\tau)d\tau$$
+$$ P= \mu\rho_{p}[\lambda(t)-\frac{1}{\lambda^2(t)}]+\mu\gamma_\infty[\lambda(t)-\frac{1}{\lambda^2(t)}]\sum_n g^{(n)}\tau^{(n)}e^{-\frac{t}{\tau^{(n)}}}+\lambda(t) \mu\gamma_\infty\int_0^t\sum_n g^{(n)}e^{-\frac{t-\tau}{\tau^{(n)}}}\frac{1}{\lambda^2(\tau)}d\tau-\frac{1}{\lambda^2(t)}\mu\gamma_\infty\int_0^t\sum_n g^{(n)}e^{-\frac{t-\tau}{\tau^{(n)}}}\lambda(\tau)d\tau$$
 
 Its abstract form is
 
@@ -107,7 +105,22 @@ $$P=Hg+b$$
 to find $g$ with accuracy and sparsity.
 ```matlab
 b = rhop0mu*(lambda_t-1./lambda_t.^2);
-H = mu*(lambda_t-1./lambda_t.^2).*tau.*A+gammarhod0mu*lambda_t.*conv_matrix(1./lambda_t.^2,an1)*dt*A-gammarhod0mu*1./lambda_t.^2.*conv(lambda_t,an1)*dt*A
+H = gammarhod0mu*(lambda_t-1./lambda_t.^2)'.*tau.*A+gammarhod0mu*lambda_t'.*conv_matrix(1./lambda_t.^2,length(time_series))*dt*A-gammarhod0mu*(1./lambda_t.^2)'.*conv_matrix(lambda_t,length(time_series))*dt*A;
+signal = P'-b';
 ```
+Create dictionary, normalize-le and apply matching pursuit
+```matlab
+%% Normalized H
+for ii=1:size(H,2)
+    norm_H2(ii) = norm(H(:,ii),2);
+    H_norm(:,ii) = H(:,ii)/norm_H2(ii);
+end
+g = matchingpursuit(signal,H_norm);
+G_recover = g./norm_H2';
+tau_recover = tau(find(G_recover));
+```
+# Result
+
+
 
 [search_PS_from_kinetics]: ./search_PS_from_kinetics.md
