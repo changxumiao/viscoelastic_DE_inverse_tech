@@ -18,7 +18,7 @@ $$\phi_B(t-\tau)\approx\sum_n g^{(n)}e^{-\frac{t-\tau}{\tau^{(n)}}}$$
 
 $$n(t)=\int_{-\infty}^0\phi_B(t-\tau)d\tau\approx \sum_n g^{(n)}\tau^{(n)}e^{-\frac{t}{\tau^{(n)}}}$$
 
-The question becomes deconvolution: finding lest number of $g^{(n)}$ that satisfy the above equation.
+The question becomes deconvolution: finding least number of $g^{(n)}$ that satisfy the above equation.
 
 # Generate signal
 | Parameter | Value |
