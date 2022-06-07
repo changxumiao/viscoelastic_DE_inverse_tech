@@ -121,6 +121,15 @@ tau_recover = tau(find(G_recover));
 ```
 # Result
 
+| $g^{(n)}$ | $\tau^{(n)}$ |
+| --- | --- |
+| $0.8336$ |$0.7210$|
+| $0.0047$ |$60.9386$|
+
+![measurement_reconstruction_simulation](./resource2/measure_recon_sim.jpg)
+
+![prony_series_recon](./resource2/prony_recon.jpg)
+
 
 
 [search_PS_from_kinetics]: ./search_PS_from_kinetics.md
