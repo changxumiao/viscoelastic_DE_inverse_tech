@@ -40,7 +40,7 @@ Namely
 
 $$G^*(\omega)=G_0(1+\sum_{k=1}^K g_k \frac{\omega^2\tau^2_k}{1+\omega^2\tau^2_k}+i\sum_{k=1}^K g_k \frac{\omega^2\tau_k}{1+\omega^2\tau^2_k})$$
 
-$G'(\omega)$, the real part of $G^*(\omega)$, is called the *storage modulus*; $G''(\omega)$, the imaginary part of $G^*(\omega)$, is called the *loss modulus*.
+$G'(\omega)$, the real part of $G^{*}(\omega)$, is called the _storage modulus_; $G''(\omega)$, the imaginary part of $G^*(\omega)$, is called the _loss modulus_.
 
 # Abstract problem
 Find least number of $\{g_k,\tau_k\}$, subject to
