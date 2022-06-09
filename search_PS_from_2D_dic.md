@@ -21,6 +21,49 @@ To limit our scope, the material is assumed to a double network: permanent netwo
     - Reaction force residual on loading degree of freedom
 5. Select Prony Series with accuracy and sparsity.
 
+# Python coding
+Ideas:
+Each process should be a mini-service in form of Class. Each test is a class instance.
+Given:
+- Coordinate of nodes
+- Displacement data on nodes
+- Connectivity of nodes: from nodes to elements
+- Boundary forces on nodes
+- Material properties: Neo-Hookian
+1. A class of extracting geometry
+    - input: data frame
+    - output: nodes ID, coordinates, displacement
+    - Sort coordinates of nodes
+2. A class of elements
+    - input: data frame of connectivity, nodes ID, coordinate, displacement
+    - output: elements, connectivity, deformation gradient, velocity gradient
+    - form elements from nodes and connectivity
+    - deformation gradient
+    - velocity gradient
+3. A class of constitutive law
+    - input: deformation gradient
+    - output: PK2 stress tensor
+    - alternative strain field
+        - inverse of deformation gradient
+        - right Cauchy-Green deformation tensor
+        - Green-Lagrange strain tensor
+        - invariant of Cauchy-Green deformation tensor
+    - Neo-Hookian
+    - Linear elasticity
+
+    - stress alternatives (from PK2 to PK1 and Cauchy)
+    - alternative stress field
+        - from PK2 to PK1
+        - from PK2 to Cauchy
+4. A class of dynamics law
+    - input: velocity gradient, Prony Series
+    - Viscousity
+    - Dynamic network (Prony Series)
+
+5. A module listing element family
+    - element dimension
+    - number of nodes per element
+
 
 
 [EUCLID]: https://github.com/EUCLID-code
