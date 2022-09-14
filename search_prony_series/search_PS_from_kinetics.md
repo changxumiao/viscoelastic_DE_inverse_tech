@@ -66,7 +66,7 @@ error=zeros(1,I_MAX);
 count = 0;
 while true
     alpha = dictionary'*r;
-    [~,index] = sort(abs(abs(alpha)),'desc');
+    [~,index] = sort(alpha,'desc');
     alpha_tri_MP(index(1)) = alpha(index(1));
     x = x + dictionary(:,index(1))*alpha_tri_MP(index(1));
     r = signal - x;
