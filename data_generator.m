@@ -1,19 +1,39 @@
 clear all
-check = 0;
+
+%loading type
 unaxial_tension = 0;
 pure_shear = 1;
 
 markerinterval = 200;
-back2real = 0;
-mu = 10e3;
+check = 1;
+back2real = 1;
 
-N1 = 0.17;
-N2 = 0.14842;
+
+mu = 12.42e3;
+N1 = 0.1234;%fraction of permenant bonds
+N2= (1-N1);
+
+%% Prony Series
+tau1 = 0.1;
+tau2 = 4.2;
+tau3 = 33.78;
+tau4 = 3134;
+
+g1 = 0.1234;
+g2 = 0.1234;
+g3 = 0.1234;
+g4 = 0.1234;
+
+tau1_dimless = tau1/tau1;
+tau2_dimless = tau2/tau1;
+tau3_dimless = tau3/tau1;
+tau4_dimless = tau4/tau1;
 
 %% loading info
-disp_max = 2;
+disp_max_dimless = 1;
 loading_rate = 0.03;
-loading_time = disp_max/loading_rate;
+loading_rate_dimless = loading_rate*tau1;
+loading_time = disp_max_dimless/loading_rate_dimless;
 deloading_time = loading_time;
 time_sum = loading_time+deloading_time;
 %%
@@ -41,8 +61,6 @@ end
 if pure_shear
     FxY = (loading_rate*time_series.*(time_series<loading_time)+((-loading_rate)*(time_series-loading_time)+loading_rate*loading_time).*(time_series>=loading_time));%    [1]
 end
-
-
 
 %% Assemble matrix of deformation gradient
 for ii = 1:1:length(time_series)
@@ -84,23 +102,9 @@ if check
     ylabel('inverse of deformation gradient (H)')
     title('inverse of deformation gradient (H)')
 end
-%% Prony Series
-tau1 = 0.4149;
-tau2 = 4.350;
-tau3 = 47.78;
-tau4 = 1259;
-g1 = 0.372740117/tau1;
-g2 = 0.310444392/tau2;
-g3 = 0.165718723/tau3;
-g4 = 0.151096768/tau4;
-
-tau1_dimless = tau1/tau1;
-tau2_dimless = tau2/tau1;
-tau3_dimless = tau3/tau1;
-tau4_dimless = tau4/tau1;
-
-an1 = g1*exp(-time_series/tau1_dimless)+g2*exp(-time_series/tau2_dimless)+g3*exp(-time_series/tau3_dimless)+g4*exp(-time_series/tau4_dimless);
-an1_int = g1*tau1_dimless*exp(-time_series/tau1_dimless)+g2*tau2_dimless*exp(-time_series/tau2_dimless)+g3*tau3_dimless*exp(-time_series/tau3_dimless)+g4*tau4_dimless*exp(-time_series/tau4_dimless);
+%%
+an1 = g1/tau1_dimless*exp(-time_series/tau1_dimless)+g2/tau2_dimless*exp(-time_series/tau2_dimless)+g3/tau3_dimless*exp(-time_series/tau3_dimless)+g4/tau4_dimless*exp(-time_series/tau4_dimless);
+an1_int = g1*exp(-time_series/tau1_dimless)+g2*exp(-time_series/tau2_dimless)+g3*exp(-time_series/tau3_dimless)+g4*exp(-time_series/tau4_dimless);
 if check
     figure
     plot(time_series,an1)
@@ -118,7 +122,6 @@ if check
 end
     
 %% Elastic contribution
-
 for ii = 1:1:length(time_series)
     S_elastic(:,:,ii) = N1*eye(3,3);
 end
@@ -148,7 +151,7 @@ end
 for ii = 1:1:length(time_series)
     p_auxiliary(ii) = (1/3)*trace(s(:,:,ii));
     s_dev(:,:,ii) = s(:,:,ii) - p_auxiliary(ii)*eye(3,3);
-    P_dev(:,:,ii) = J(ii)*s_dev(:,:,ii)*H(:,:,ii);
+    P_dev(:,:,ii) = J(ii)*s_dev(:,:,ii)*H(:,:,ii)';
     S_dev(:,:,ii) = J(ii)*H(:,:,ii)*s_dev(:,:,ii)*H(:,:,ii)';
 end
 
@@ -217,11 +220,13 @@ if unaxial_tension
     plot(time_series*tau1,squeeze(P_dev(1,1,:)*mu/1e3),'-o','MarkerIndices',1:markerinterval:length(time_series));
     xlabel('time')
     ylabel('P_d11 (kPa)')
+    title('Divatoric nominal stress')
 
     figure
     plot(FxX,squeeze(P_dev(1,1,:)*mu/1e3),'-o','MarkerIndices',1:markerinterval:length(time_series));
     xlabel('FxX')
     ylabel('P_d11 (kPa)')
+    title('Divatoric nominal stress')
 end
 
 if pure_shear
@@ -229,9 +234,11 @@ if pure_shear
     plot(time_series*tau1,squeeze(s_dev(1,2,:)*mu/1e3),'-o','MarkerIndices',1:markerinterval:length(time_series));
     xlabel('time')
     ylabel('s_d12 (kPa)')
+    title('Divatoric Cauchy stress')
 
     figure
     plot(FxY,squeeze(s_dev(1,2,:)*mu/1e3),'-o','MarkerIndices',1:markerinterval:length(time_series));
     xlabel('FxY')
     ylabel('s_d12 (kPa)')
+    title('Divatoric Cauchy stress')
 end
