@@ -168,7 +168,7 @@ if check
     plot(time_series,p_auxiliary)
     xlabel('time')
     ylabel('p_{auxil}')
-    title('hydrostatic pressure')
+    title('Auxiliary pressure')
 end
 
 
