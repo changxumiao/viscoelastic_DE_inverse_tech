@@ -53,13 +53,13 @@ F = zeros(3,3,length(time_series));
 H = zeros(3,3,length(time_series));
 %% loading type
 if unaxial_tension
-    FxX = 1 + loading_rate*time_series.*(time_series<loading_time)+((-loading_rate)*(time_series-loading_time)+loading_rate*loading_time).*(time_series>=loading_time);%    [1]
+    FxX = 1 + loading_rate_dimless*time_series.*(time_series<loading_time)+((-loading_rate_dimless)*(time_series-loading_time)+loading_rate_dimless*loading_time).*(time_series>=loading_time);%    [1]
     FyY = 1./FxX.^0.5;
     FzZ = 1./FxX.^0.5;
 end
 
 if pure_shear
-    FxY = (loading_rate*time_series.*(time_series<loading_time)+((-loading_rate)*(time_series-loading_time)+loading_rate*loading_time).*(time_series>=loading_time));%    [1]
+    FxY = (loading_rate_dimless*time_series.*(time_series<loading_time)+((-loading_rate_dimless)*(time_series-loading_time)+loading_rate_dimless*loading_time).*(time_series>=loading_time));%    [1]
 end
 
 %% Assemble matrix of deformation gradient
