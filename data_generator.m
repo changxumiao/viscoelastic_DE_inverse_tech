@@ -97,7 +97,7 @@ if check
     plot(time_series,squeeze(H(3,1,:)),'d','MarkerIndices',1:markerinterval:length(time_series));hold on;
     plot(time_series,squeeze(H(3,2,:)),'^','MarkerIndices',1:markerinterval:length(time_series));hold on;
     plot(time_series,squeeze(H(3,3,:)),'v','MarkerIndices',1:markerinterval:length(time_series));hold on;
-    legend('HxX','HxY','HxZ','HyX','HyY','HyZ','HzX','HzY','HzZ')
+    legend('HXx','HXy','HXz','HYx','HYy','HYz','HZx','HZy','HZz')
     xlabel('time')
     ylabel('inverse of deformation gradient (H)')
     title('inverse of deformation gradient (H)')
@@ -133,7 +133,7 @@ end
 
 %% Viscous contribution (2)
 for jj = 1:1:3
-    for kk = jj:1:3
+    for kk = 1:1:3
         cache = conv(an1,squeeze(H_HT(jj,kk,:))','full')*dt;
         S_viscous2(jj,kk,:) = N2*cache(1:length(time_series));
     end
